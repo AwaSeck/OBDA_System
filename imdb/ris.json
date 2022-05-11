@@ -1,0 +1,224 @@
+{
+  "mappings": [
+    {
+      "name": "work_info",
+      "head": [
+        [
+          "$WORK_IRI",
+          "<ex:hasTitle>",
+          "$WORK_TITLE"
+        ],
+        [
+          "$WORK_IRI",
+          "<ex:hasYear>",
+          "$WORK_YEAR"
+        ]
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "WORK_TITLE": "title",
+          "WORK_IRI": "<ex:work/{id}>",
+    "WORK_YEAR": "production_year"
+        },
+        "query": "select id, title,production_year from title"
+      }
+    },
+
+    {
+      "name": "getFilm_withKeyword",
+      "head": [
+        [
+          "$WORK_IRI",
+          "<ex:hasTitle>",
+          "$WORK_TITLE"
+        ],
+        [
+          "$WORK_IRI",
+          "<ex:hasKeyword>",
+          "$WORK_KEYWORD"
+        ]
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "WORK_IRI": "T.id",
+          "WORK_TITLE":"T.title",
+    "WORK_KEYWORD": "K.keyword"
+        },
+        "query": "select T.id, T.title, K.keyword from title as T, keyword as K, movie_keyword as MK where K.phonetic_code=T.phonetic_code and MK.keyword_id=K.id"
+      }
+    },
+
+    {
+      "name": "person_role",
+      "head": [
+        [
+          "$PERSON",
+          "<ex:hasRole>",
+          "$ROLE"
+        ],
+        [
+          "$PERSON",
+          "<ex:hasPlayedIn>",
+          "$WK_TTL"
+        ]
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "PERSON": "N.name",
+          "ROLE": "R.role",
+          "WK_TTL":"T.title"
+          
+        },
+        "query": "select N.name, R.role, T.title from name as N, role_type as R, cast_info as C, title as T where C.role_id=R.id and C.person_id=N.id and T.id=C.movie_id"
+      }
+    },
+
+    {
+      "name": "film_With_given_person",
+      "head": [
+        [
+          "$PERSON",
+          "<ex:hasPlayedIn>",
+          "$WK_TTL"
+        ]
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "PERSON": "N.name",
+          "WK_TTL":"T.title"
+        },
+        "query": "select N.name,T.title from name as N, role_type as R, cast_info as C, title as T where C.role_id=R.id and C.person_id=N.id and T.id=C.movie_id"
+      }
+    },
+
+    {
+      "name": "film_genre",
+      "head": [
+        [
+          "$WORK_IRI",
+          "<ex:hasGenre>",
+          "$WORK_GENRE"
+        ]
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "WORK_GENRE": "K.kind",
+          "WORK_IRI": "T.title"
+        },
+        "query": "select T.title, K.kind from kind_type as K, title as T where T.kind_id=K.id"
+      }
+    },
+
+    {
+      "name": "film_ActorsRole_with_GivenKeyword",
+      "head": [
+        [
+          "$WORK_IRI",
+          "<ex:hasPersonage>",
+          "$WORK_ACTORS"
+        ],
+        [
+          "$WORK_ACTORS",
+          "<ex:hasRole>",
+          "$ROLE"
+        ],
+        [
+          "$WORK_IRI",
+          "<ex:hasKeyword>",
+          "$WORK_KEYWORD"
+        ]
+
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "WORK_ACTORS": "N.name",
+          "WORK_IRI": "T.title",
+          "ROLE": "R.role",
+    "WORK_KEYWORD": "K.keyword"
+        },
+        "query": "select T.title, N.name, R.role, K.keyword from name as N, cast_info as C, title as T, keyword as K, role_type as R where C.person_id=N.id and T.id=C.movie_id and K.phonetic_code=T.phonetic_code and R.id=C.role_id"
+      }
+    },
+
+    {
+      "name": "film_after2000",
+      "head": [
+        [
+          "$WK_RI",
+          "<ex:hasRecentYear>",
+          "$WORK_YEAR"
+        ]
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "WK_RI":"T.title",
+          "WORK_YEAR": "T.production_year"
+        },
+        "query": "select T.title, N.name, T.production_year from name as N, role_type as R, cast_info as C, title as T where C.role_id=R.id and C.person_id=N.id and T.id=C.movie_id and T.production_year > 2000"
+      }
+    },
+
+    {
+      "name": "filmOnTv",
+      "head": [
+        [
+          "$WORK_IRI",
+          "<ex:onTv>",
+          "$WORK_GENRE"
+        ]
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "WORK_GENRE": "K.kind",
+          "WORK_IRI": "T.title"
+        },
+        "query": "select T.title, K.kind from kind_type as K, title as T where T.kind_id=K.id and kind='episode' or kind='tv movie' or kind='tv series'"
+      }
+    },
+    {
+      "name": "film_with_more_genre",
+      "head": [
+        [
+          "$WORK_IRI",
+          "<ex:hasMoreGenre>",
+          "$WORK_GENRE"
+        ],
+        [
+          "$WORK_IRI",
+          "<ex:hasMoreGenre>",
+          "$WORK_GENRE2"
+        ]
+      ],
+      "body": {
+        "datasource": "IMDB_SQLITE",
+        "templates": {
+          "WORK_GENRE": "K.kind",
+          "WORK_GENRE2": "K2.kind",
+          "WORK_IRI": "T.title"
+        },
+        "query": "select T.title, K.kind, K2.kind from kind_type as K, title as T, kind_type as K2 where T.kind_id=K.id and K.kind!=K2.kind"
+      }
+    }
+  ],
+  "datasources": [
+    {
+      "name": "IMDB_SQLITE",
+      "type": "SQLITE",
+      "parameters": {
+        "databasePath": "./imdb.db"
+      }
+    }
+  ],
+  "RDFSRuleSet": "RDFS",
+  "name": "IMDB",
+  "description": "système OBDA sur IMDB à compléter",
+  "ontology": "imdb-ontology.nt"
+}

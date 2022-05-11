@@ -1,0 +1,32 @@
+<ex:hasTitle> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Work> .
+<ex:hasTitle> <http://www.w3.org/2000/01/rdf-schema#range> <ex:Title> .
+
+<ex:hasYear> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Work> .
+<ex:hasYear> <http://www.w3.org/2000/01/rdf-schema#range> <ex:Year> .
+
+<ex:hasRecentYear> <http://www.w3.org/2000/01/rdf-schema#range> <ex:Year> .
+<ex:hasRecentYear> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <ex:hasYear> .
+<ex:hasRecentYear> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Work> .
+
+<ex:hasKeyword> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Work> .
+<ex:hasKeyword> <http://www.w3.org/2000/01/rdf-schema#range> <ex:Keyword> .
+
+<ex:hasPlayedIn> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Work> .
+
+<ex:hasRole> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Personage> .
+<ex:hasRole> <http://www.w3.org/2000/01/rdf-schema#range> <ex:Role> .
+
+<ex:Personage> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <ex:Person> .
+
+<ex:hasGenre> <http://www.w3.org/2000/01/rdf-schema#range> <ex:Genre> .
+<ex:hasGenre> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Work> .
+
+<ex:hasPersonage> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Work> .
+<ex:hasPersonage> <http://www.w3.org/2000/01/rdf-schema#range> <ex:Personage> .
+
+<ex:onTv> <http://www.w3.org/2000/01/rdf-schema#domain> <ex:Work> .
+
+
+
+
+

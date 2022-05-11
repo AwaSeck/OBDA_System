@@ -1,0 +1,2 @@
+# all triplets
+Q1<$x,$y,$z> :- triple($x, $y, $z);
